@@ -2,7 +2,6 @@ package br.com.unicuritiba.gymcrm.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,11 @@ import br.com.unicuritiba.gymcrm.repository.AlunoRepository;
 @RestController
 public class AlunoController {
 
-	@Autowired
-	private AlunoRepository repositorio;
+	private final AlunoRepository repositorio;
+
+	AlunoController(AlunoRepository repositorio) {
+		this.repositorio = repositorio;
+	}
 	
 	@GetMapping("/alunos")
 	public ResponseEntity<List<Aluno>> getAlunos() {
@@ -47,12 +49,11 @@ public class AlunoController {
 	@PutMapping("/alunos/{id}")
 	public ResponseEntity<Aluno> updateAlunoById(
 			@PathVariable long id,
-			@RequestBody Aluno aluno
-			){
+			@RequestBody Aluno aluno){
 		
 		aluno.setId(id);
-		Aluno updatedAluno = repositorio.save(aluno);
-		return ResponseEntity.ok(updatedAluno);
+		Aluno alunoAtualizado = repositorio.save(aluno);
+		return ResponseEntity.ok(alunoAtualizado);
 	}
 	
 	@PostMapping("/alunos")
